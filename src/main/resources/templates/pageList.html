@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>文章列表</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+	
+		<!--[if lte IE 8]><script src="/js/html5shiv.js"></script><![endif]-->
+		<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+		<script th:src="@{/js/skel.min.js}"></script>
+		<script th:src="@{/js/skel-panels.min.js}"></script>
+		<script th:src="@{/js/init.js}"></script>
+		<script th:src="@{/js/template-web.js}"></script>
+
+
+		<script src="/js/bootstrap/bootstrap.js"></script>
+		<script src="/js/bootstrap/bootstrap-table.js"></script>
+
+
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+
+        <link rel="stylesheet" href="/css/bootstrap-table.css" />
+
+        <link rel="stylesheet" href="/css/style-desktop.css" />
+        <link rel="stylesheet" href="/css/skel-noscript.css" />
+        <link rel="stylesheet" href="/css/style.css"/>
+
+
+        <link rel="stylesheet" href="/css/flat-ui.css" />
+
+        <link rel="stylesheet" href="/css/toastr.min.css" />
+
+		<script src="/js/bootstrap/toastr.min.js"></script>
+        <script src="/js/bootstrap/PaperMsg.js"></script>
+		<link rel="stylesheet" th:href="@{/css/ie/v8.css}" />
+		<link rel="stylesheet" th:href="@{/css/ie/v9.css}" />
+	</head>
+<body>
+
+
+		<!-- Header -->
+		<div id="header" style="width: 100%">
+			<div class="container">
+
+				<!-- Logo -->
+				<div id="logo">
+					<h1><b1>Nanyin</b1></h1>
+					<span>Design by Nanyin</span>
+				</div>
+				
+				<!-- Nav -->
+				<nav id="nav">
+					<ul>
+                        <li ><a href="/">主页</a></li>
+                        <li class="active"><a href="/paper/pages">文章列表</a></li>
+                        <li><a href="/resource/returnResource">分享</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+        <script id="test" type="text/html">
+			<ul class="style">
+				<li>
+                    <form action="SelectPaper/{{id}}" method="post">
+                        <input type="hidden" value="{{id}}" />
+					    <p class="posted">{{b_time}}|  ({{mark}}) &nbsp; Hotrank</p>
+
+                        <input type="submit" class="btn btn-link" value="{{b_name}}"/>
+                        <!--<p class="text">{{b_name}} </p>-->
+                        <p class="posted">文章标签：{{type}}</p>
+                    </form>
+
+				</li>
+			</ul>
+        </script>
+
+        <!--数据处理-->
+        <script type="text/javascript">
+            var x;
+            var html ='';
+            $(document).ready(function () {
+                $.ajax( {
+                    type : "get",
+                    dataType:"json",
+                    url : "/paper/SelectTitles",
+                    timeout : 20000,
+                    cache : false,
+                    success : function(data) {
+                        var i;
+                        for(i in data){
+//                            alert(JSON.stringify(data[i]));
+                             html = template('test', data[i])+html;
+                        }
+                        x = data;
+                        document.getElementById('content1').innerHTML = html;
+                    }
+                });
+
+            })
+        </script>
+		<!-- Main -->
+		<div id="main">
+			<div class="container">
+				<div class="row"> 
+
+					<!-- Sidebar -->
+					<div id="sidebar" class="4u">
+						<section>
+							<header>
+								<h2>最近文章列表</h2>
+							</header>
+
+                            <div id="content1"></div>
+
+						</section>
+					</div>
+
+					<!-- Content -->
+					<div id="content" class="8u skel-cell-important" >
+
+                        <!--查询框-->
+                        <div class="container-fluid" >
+                            <div class="container">
+                                <nav role="navigation" class="navbar navbar-default" style="width: 700px">
+                                    <div class="navbar-header">
+                                        <button data-target="#bt1" data-toggle="collapse" class="navbar-toggle" type="button">
+                                            <span class="sr-only">Toggle navigation</span>
+
+                                        </button>
+                                        <a href="#" class="navbar-brand">文章标题查询</a>
+                                    </div>
+                                    <div id="bt1" class="collapse navbar-collapse">
+                                        <form role="search" id="formSearch"  class="navbar-form navbar-left">
+                                            <div class="form-group">
+                                                <input type="text" id="ByName" placeholder="Search" class="form-control"/>
+                                            </div>
+                                            <button class="btn btn-default" id="btn_query" type="button">查询</button>
+                                            <b class="text-info">直接双击查看文章内容</b>
+                                        </form>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <!-- table -->
+
+                        <table id="mytable" ></table>
+
+                        <!-- 表格下面应该加一些标签。。。 做成小标签的格式 根据标签进行检索 -->
+
+                        <div class="container-fluid">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <span class="label badge-success">文字标签</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+			</div>
+		</div>
+
+		
+	</body>
+</html>

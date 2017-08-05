@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Simple example - Editor.md examples</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../editmd/css/editormd.css" />
+    <!--<link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />-->
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script src="../js/editormd.min.js"></script>
+    <script src="../js/image-dialog.js"></script>
+    <script src="../js/modal.js"></script>
+    <script th:src="@{/js/template-web.js}"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrapValidator.min.css" />
+    <script src="/js/bootstrap/bootstrapValidator.min.js"></script>
+    <script src="/js/bootstrap/MyValidator.js"></script>
+    <!--<link rel="stylesheet" href="/css/bootstrap-table.css" />-->
+    <link rel="stylesheet" href="/css/flat-ui.css" />
+</head>
+
+<body>
+<div id="layout">
+    <header>
+        <h1>编辑页面</h1>
+    </header>
+<!-- 以下是编辑页面的内容 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    <button type="button" id="but" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-lg btn-block">提交内容 button</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="test-editormd">
+            <!--<p id="content1"></p>-->
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">提交表单</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 里面包括 文章标题 内容（获取到的html） 文章的标签（自己写） 就ok了 最后ajax提交-->
+                    <form id="form123" name="form123">
+                    <div class="form-group">
+                        <b>标题：</b>
+                        <input class="form-control typeahead-only" type="text" id="f01" name="f01" />
+                        <span class="form-control-feedback fui-location"></span>
+                    </div>
+                    <div class="form-group">
+                        <b>文章标签：</b>
+                        <input class="form-control typeahead-only" type="text" id="f02"  name="f02"/>
+                        <span class="form-control-feedback fui-location"></span>
+                    </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="sub" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    var testEditor;
+
+    $(function() {
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 640,
+            path : '../editmd/lib/',
+            imageUpload : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/uploadFile",
+            emoji : true,
+            taskList : true,
+            saveHTMLToTextarea : true,
+//            theme : "dark",
+//            previewTheme : "dark",
+//            editorTheme : "pastel-on-dark"
+
+        });
+    });
+
+    $("#sub").bind('click', function(){
+        var title = $("#f01").val();
+//        alert(title);
+        var type = $("#f02").val();
+        var get = testEditor.getMarkdown();
+//        alert(get)
+        var data = {b_name:title,
+                    content:get,
+                    type:type};
+        $.ajax({
+                type:'post',
+                url:'/paper/InsertPaper',
+                data:data,
+                dataType:'json',
+                success:function () {
+                    alert("success");
+                }
+
+        })
+
+    });
+</script>
+
+<!-- 以下是修改文章内容的页面 -->
+<div class="span12">
+    <form class="form-search">
+        <input class="form-control typeahead-only" type="text" value="输入文章名得到内容" id="in1" name="in1"/>
+        <button type="button" class="btn" id="bt1">查找文章标题</button>
+    </form>
+</div>
+
+<!-- script 模板-->
+<script id="test" type="text/html">
+    <textarea>{{content}}</textarea>
+</script>
+
+<script type="text/javascript">
+    var html= '';
+    $("#bt1").click(function () {
+        var a = document.getElementById('in1').value;
+        alert(a);
+        var data = {"title":a};
+        alert(JSON.stringify(data));
+        $.ajax({
+            type:'post',
+            dataType:'json',
+            data:data,
+            url:'/paper/SelectByTitle',
+            success:function (data) {
+                alert(data.content);
+                alert(JSON.stringify(data));
+                html = template('test', data);
+                document.getElementById('content1').innerHTML = data.content;
+                alert(html);
+            }
+        })
+    })
+</script>
+源码：
+<textarea id="content1"></textarea> 拿到源码后粘贴到编辑页点击修改按钮提交
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <button type="button" id="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary btn-lg btn-block">提交修改内容 button</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">提交表单</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <b>标题：标题要和原标题相同 否则插入会失败</b>
+                    <input class="form-control typeahead-only" type="text" id="f03"  />
+                    <span class="form-control-feedback fui-location"></span>
+                </div>
+                <div class="form-group">
+                    <b>文章标签：</b>
+                    <input class="form-control typeahead-only" type="text" id="f04" />
+                    <span class="form-control-feedback fui-location"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" id="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#submit").click(function () {
+        var title = $("#f03").val();
+//        alert(title);
+        var type = $("#f04").val();
+        var get = testEditor.getMarkdown();
+//        alert(get)
+        var data = {b_name:title,
+            content:get,
+            type:type};
+        $.ajax({
+            type:'post',
+            url:'/paper/UpdatePage',
+            data:data,
+            dataType:'json',
+            success:function () {
+                alert("success");
+            }
+        })
+
+    })
+</script>
+
+<div class="span12">
+    <form class="form-search">
+         <input class="form-control typeahead-only" value="输入文章名删除" type="text" id="in2" name="in2"/>
+        <button type="button" class="btn" id="bt2">删除</button>
+    </form>
+</div>
+<script type="text/javascript">
+
+$("#bt2").click(function () {
+
+        var title = $("#in2").val();
+//        alert(title);
+        var data = {b_name:title};
+        $.ajax({
+            type:'post',
+            url:'/paper/DelectByTitle',
+            data:data,
+            dataType:'json',
+            success:function () {
+                alert("success");
+            }
+        })
+})
+</script>
+
+<!-- 以下是修改删除资源的页面 -->
+
+    <!--修改-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <button type="button" id="R_button" data-toggle="modal" data-target="#myModal3" class="btn btn-primary btn-lg btn-block">增加资源 button</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel3">提交表单</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <b>资源名称</b>
+                    <input class="form-control typeahead-only" type="text" id="f05"  />
+                    <span class="form-control-feedback fui-location"></span>
+                </div>
+                <div class="form-group">
+                    <b>资源来源</b>
+                    <input class="form-control typeahead-only" type="text" id="f06" />
+                    <span class="form-control-feedback fui-location"></span>
+                </div>
+                <div class="form-group">
+                    <b>资源地址</b>
+                    <input class="form-control typeahead-only" type="text" id="f07" />
+                    <span class="form-control-feedback fui-location"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" id="R_submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--增加内容的-->
+<script type="text/javascript">
+    $("#R_submit").click(function () {
+        var name =$("#f05").val();
+        var source = $("#f06").val();
+        var address = $("#f07").val();
+        var data = {name:name,
+            source:source,
+            address:address};
+        $.ajax({
+            type:'post',
+            url:'/resource/InsertRes',
+            data:data,
+            dataType:'json',
+            success:function () {
+                alert("success");
+            }
+        })
+
+    })
+</script>
+<!--删除资源 by id-->
+<div class="span12">
+    <form class="form-search">
+        <input class="form-control typeahead-only" value="输入资源id删除" type="text" id="in3" name="in3"/>
+        <button type="button" class="btn" id="bt3">删除</button>
+    </form>
+</div>
+<script type="text/javascript">
+    $("#bt3").click(function () {
+        var id = $("#in3").val();
+        var data = {id:id};
+        $.ajax({
+            type:'post',
+            url:'/resource/DelectRes',
+            data:data,
+            dataType:'json',
+            success:function () {
+                alert("success");
+            }
+        })
+    })
+</script>
+</body>
+</html>

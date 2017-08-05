@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>文章列表</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+	
+		<!--[if lte IE 8]><script src="/js/html5shiv.js"></script><![endif]-->
+		<script th:src="@{/js/jquery-1.11.1.min.js}"></script>
+            <!--<script th:src="@{/js/skel.min.js}"></script>-->
+            <!--<script th:src="@{/js/skel-panels.min.js}"></script>-->
+            <!--<script th:src="@{/js/init.js}"></script>-->
+		<script th:src="@{/js/template-web.js}"></script>
+        <script src="/js/bootstrap/bootstrap.js"></script>
+        <script src="/js/bootstrap/bootstrap-table.js"></script>
+
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/editmd/css/editormd.css" />
+
+			<link rel="stylesheet" th:href="@{/css/skel-noscript.css}" />
+			<link rel="stylesheet" th:href="@{/css/style.css}" />
+			<link rel="stylesheet" th:href="@{/css/style-desktop.css}" />
+			<link rel="stylesheet" href="/css/font-awesome.css" />
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+		<link rel="stylesheet" th:href="@{/css/flat-ui.css}" />
+        <link rel="stylesheet" href="/css/bootstrap-table.css" />
+        <script src="/js/bootstrap/PaperMsg.js"></script>
+
+        <!--<link rel="stylesheet" href="/css/highLighter/shCore.css" />-->
+        <!--<script src="/js/bootstrap/shCore.js"></script>-->
+        <!--<link rel="stylesheet" href="/css/highLighter/shThemeDefault.css" />-->
+        <!--<script src="/js/highLighter/shBrushJava.js"></script>-->
+        <!--<link rel="stylesheet" href="/css/highLighter/shCoreDefault.css" />-->
+        <!--<script src="/js/highLighter/shAutoloader.js"></script>-->
+		<!--[if lte IE 8]><link rel="stylesheet" th:href="@{/css/ie/v8.css}" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" th:href="@{/css/ie/v9.css}" /><![endif]-->
+	</head>
+<body>
+
+
+		<!-- Header -->
+		<div id="header">
+			<div class="container">
+
+				<!-- Logo -->
+				<div id="logo">
+					<h1><b1>Nanyin</b1></h1>
+					<span>Design by Nanyin</span>
+				</div>
+				
+				<!-- Nav -->
+				<nav id="nav">
+					<ul>
+						<li ><a href="/">主页</a></li>
+						<li class="active"><a href="/paper/pages">文章列表</a></li>
+						<li><a href="/resource/returnResource">分享</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+        <script id="test" type="text/html">
+			<ul class="style">
+				<li>
+					<form th:action="@{/paper/SelectPaper/{{id}}}" method="post">
+						<input type="hidden" value="{{id}}" />
+						<p class="posted">{{b_time}}|  ({{mark}}) &nbsp; Hotrank</p>
+
+						<input type="submit" class="btn btn-link" value="{{b_name}}"/>
+						<!--<p class="text">{{b_name}} </p>-->
+						<p class="posted">文章类型：{{type}}</p>
+					</form>
+				</li>
+			</ul>
+        </script>
+
+        <!--数据处理-->
+        <script type="text/javascript">
+            var x;
+            var html ='';
+            $(document).ready(function () {
+                $.ajax( {
+                    type : "get",
+                    dataType:"json",
+                    url : "/paper/SelectTitles",
+                    timeout : 20000,
+                    cache : false,
+                    success : function(data) {
+                        var i;
+                        for(i in data){
+//                            alert(JSON.stringify(data[i]));
+                             html = template('test', data[i])+html;
+                        }
+                        x = data;
+                        document.getElementById('content1').innerHTML = html;
+                    }
+                });
+
+            })
+        </script>
+		<!-- Main -->
+		<div id="main">
+			<div class="container">
+				<div class="row"> 
+
+					<!-- Sidebar -->
+					<div id="sidebar" class="4u">
+						<section>
+							<header>
+								<h2>最近文章列表</h2>
+							</header>
+
+                            <div id="content1"></div>
+
+						</section>
+					</div>
+
+
+
+                    <!--<script src="/js/jquery.min.js"></script>-->
+                    <script src="/js/editormd.min.js"></script>
+                    <script src="/js/image-dialog.js"></script>
+                    <script src="/js/modal.js"></script>
+
+                    <script src="/editmd/lib/marked.min.js"></script>
+                    <script src="/editmd/lib/prettify.min.js"></script>
+
+                    <script src="/editmd/lib/raphael.min.js"></script>
+                    <script src="/editmd/lib/underscore.min.js"></script>
+                    <script src="/editmd/lib/sequence-diagram.min.js"></script>
+                    <script src="/editmd/lib/flowchart.min.js"></script>
+                    <script src="/editmd/lib/jquery.flowchart.min.js"></script>
+
+                    <script src="/js/editormd.min.js"></script>
+
+
+                    <!-- Content -->
+					<div id="content" class="8u skel-cell-important">
+
+                        <!-- 图片固定 -->
+                        <a href="#" class="image full"><img src="/images/git.jpg" alt="" /></a>
+						<!-- 标题 -->
+						<h2 th:text="${paper.b_name}">title</h2>
+                        <ul class="style">
+                            <li>
+                               <h10> 发表时间</h10> <p class="posted" th:text="${paper.b_time}">时间  </p>
+                            </li>
+                        </ul>
+
+                        <!-- 内容 -->
+                        <div id="view" style="width: 700px">
+                            <textarea style="display:none;" name="test-editormd-markdown-doc">###Hello world!</textarea>
+                        </div>
+
+                        <div id="view2">
+                            <textarea id="append-test" style="display:none;" th:text="${paper.content}">
+
+                            </textarea>
+                        </div>
+                    </div>
+                    <!-- 代码显示 -->
+                    <script type="text/javascript">
+                        $(function() {
+                            var EditormdView, EditormdView2;
+
+                            $.get("test.md", function(markdown) {
+
+                                EditormdView = editormd.markdownToHTML("view", {
+                                    markdown        : markdown + "\r\n" + $("#append-test").text(),
+                                    //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                                    //toc             : false,
+                                    tocm            : true,    // Using [TOCM]
+                                    emoji           : true,
+                                    taskList        : true,
+                                    tex             : true,  // 默认不解析
+                                    flowChart       : true,  // 默认不解析
+                                    sequenceDiagram : true,  // 默认不解析
+                                });
+
+
+                            });
+
+                            EditormdView2 = editormd.markdownToHTML("view2", {
+                                htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                                emoji           : true,
+                                taskList        : true,
+                                tex             : true,  // 默认不解析
+                                flowChart       : true,  // 默认不解析
+                                sequenceDiagram : true,  // 默认不解析
+                            });
+                        });
+                    </script>
+                        <!-- 显示代码 -->
+
+                    </div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<button class="btn btn-primary btn-lg btn-block" id="return" type="button">返回文章列表页</button>
+								</div>
+							</div>
+
+					<script type="text/javascript">
+                        var address = "/paper/pages";
+                        $("#return").click(function () {
+                            window.location.href=address;
+                        })
+					</script>
+                </div>
+			</div>
+
+
+		
+</body>
+</html>

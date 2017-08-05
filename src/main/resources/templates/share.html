@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Iridium by TEMPLATED</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="/js/html5shiv.js"></script><![endif]-->
+		<script src="/js/jquery-1.11.1.min.js"></script>
+		<script src="/js/skel.min.js"></script>
+		<script src="/js/skel-panels.min.js"></script>
+		<script src="/js/init.js"></script>
+
+        <script src="/js/bootstrap/bootstrap-table.js"></script>
+			<link rel="stylesheet" href="/css/skel-noscript.css" />
+			<link rel="stylesheet" href="/css/style.css" />
+			<link rel="stylesheet" href="/css/style-desktop.css" />
+
+        <link rel="stylesheet" href="/css/bootstrap-table.css" />
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+        <link rel="stylesheet" href="/css/flat-ui.css" />
+        <script src="/js/bootstrap/bootstrap.js"></script>
+
+        <script src="/js/bootstrap/ResouceMsg.js"></script>
+		<!--[if lte IE 8]><link rel="stylesheet" href="/css/ie/v8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="/css/ie/v9.css" /><![endif]-->
+	</head>
+	<body class="no-sidebar">
+
+		<!-- Header -->
+		<div id="header">
+			<div class="container"> 
+				
+				<!-- Logo -->
+                <div id="logo">
+                    <h1><b1>Nanyin</b1></h1>
+                    <span>Design by Nanyin</span>
+                </div>
+
+
+                <!-- Nav -->
+				<nav id="nav">
+					<ul>
+                        <li ><a href="/">主页</a></li>
+                        <li><a href="/paper/pages">文章列表</a></li>
+                        <li class="active"><a href="/resource/returnResource">分享</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<!-- Main -->
+		<!--<div id="main">-->
+			<div class="container">
+				<div class="row"> 
+					
+					<!-- Content -->
+					<div id="content" class="12u skel-cell-important">
+							<header>
+								<h1 class="byline"> </h1>
+							</header>
+							<a href="#" class="image full"><img src="/images/share.jpg" style="height: 550px" alt="" /></a>
+                            <div class="container-fluid">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <!--查询框-->
+                                        <div class="container-fluid" >
+                                            <div class="container">
+                                                <nav role="navigation" class="navbar navbar-default" style="width: 88%">
+                                                    <div class="navbar-header">
+                                                        <button data-target="#bt1" data-toggle="collapse" class="navbar-toggle" type="button">
+                                                            <span class="sr-only">Toggle navigation</span>
+
+                                                        </button>
+                                                        <a href="#" class="navbar-brand">资源查询</a>
+                                                    </div>
+                                                    <div id="bt1" class="collapse navbar-collapse">
+                                                        <form role="search" id="formSearch"  class="navbar-form navbar-left">
+                                                            <div class="form-group">
+                                                                <input type="text" id="ByName" placeholder="Search" class="form-control"/>
+                                                            </div>
+                                                            <button class="btn btn-default" id="btn_query" type="button">查询</button>
+                                                        </form>
+                                                    </div>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                        <!-- table表 -->
+                                        <table id="resourceTab"></table>
+                                    </div>
+                                </div>
+                            </div>
+
+
+					</div>
+					
+				</div>
+			</div>
+		<!--</div>-->
+		
+	</body>
+</html>
