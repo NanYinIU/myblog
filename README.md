@@ -17,7 +17,7 @@ springboot实现快速开发 集成ORM框架:mybatis
 #### INDEX 主页
 ![index](Shutter/index主页.png) 
 #### 文章列表
-![文章列表](Shutter/文章列表.png)
+![文章列表](Shutter/newBlogPage.png)
 #### 文章显示
 ![文章1](Shutter/文章1.png)
 ![文章二](Shutter/文章二.png)
