@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>文章列表</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="/js/html5shiv.js"></script><![endif]-->
+		<script src="/js/jquery-1.11.1.min.js"></script>
+		<script src="/js/skel.min.js"></script>
+		<script src="/js/skel-panels.min.js"></script>
+		<script src="/js/init.js"></script>
+        <script src="/js/template-web.js"></script>
+        <script src="/js/bootstrap/bootstrap-table.js"></script>
+			<link rel="stylesheet" href="/css/skel-noscript.css" />
+			<link rel="stylesheet" href="/css/style.css" />
+			<link rel="stylesheet" href="/css/style-desktop.css" />
+
+        <link rel="stylesheet" href="/css/bootstrap-table.css" />
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+        <link rel="stylesheet" href="/css/flat-ui.css" />
+        <script src="/js/bootstrap/bootstrap.js"></script>
+
+        <script src="/js/bootstrap/ResouceMsg.js"></script>
+		<!--[if lte IE 8]><link rel="stylesheet" href="/css/ie/v8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="/css/ie/v9.css" /><![endif]-->
+	</head>
+	<body class="no-sidebar">
+
+		<!-- Header -->
+		<div id="header">
+			<div class="container"> 
+				
+				<!-- Logo -->
+                <div id="logo">
+                    <h1><b1>Nanyin</b1></h1>
+                    <span>Design by Nanyin</span>
+                </div>
+
+
+                <!-- Nav -->
+				<nav id="nav">
+					<ul>
+                        <li ><a href="/">主页</a></li>
+                        <li class="active"><a href="/paper/pageList/1">文章列表</a></li>
+                        <li ><a href="/resource/returnResource">分享</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<!-- Main -->
+		<!--<div id="main">-->
+			<div class="container">
+				<div class="row"> 
+					
+					<!-- Content -->
+					<div id="content" class="12u skel-cell-important">
+                        <header>
+                            <h2>blog page</h2>
+                        </header>
+                        <!--查询标题栏-->
+                        <!--<nav role="navigation" class="navbar navbar-default">-->
+                            <!--<div class="navbar-header">-->
+                                <!--<button data-target="#bs-example-navbar-collapse-2" data-toggle="collapse" class="navbar-toggle" type="button">-->
+                                    <!--<span class="sr-only">Toggle navigation</span>-->
+                                    <!--<span class="icon-bar"></span>-->
+                                    <!--<span class="icon-bar"></span>-->
+                                    <!--<span class="icon-bar"></span>-->
+                                <!--</button>-->
+                                <!--<a href="#" class="navbar-brand">文章检索</a>-->
+                            <!--</div>-->
+                            <!--<div id="bs-example-navbar-collapse-2" class="collapse navbar-collapse">-->
+                                <!--<form role="search" class="navbar-form navbar-right">-->
+                                    <!--<div class="form-group">-->
+                                        <!--<input type="text" id="pname" name="pname" placeholder="Search" class="form-control"/>-->
+                                    <!--</div>-->
+                                    <!--&lt;!&ndash;<button class="btn btn-default" id="btn" name="btn" type="submit">Submit</button>&ndash;&gt;-->
+                                <!--</form>-->
+                            <!--</div>-->
+                        <!--</nav>-->
+
+
+                        <!--具体内容部分-->
+
+                        <!-- Sidebar -->
+                        <div id="sidebar" class="12u">
+                            <section><div id="content1"></div>
+
+                            <script id="page" type="text/html">
+
+                                <ul class="style">
+
+                                    <li>
+                                        <form th:action="@{/paper/SelectPaper/{{id}}}" method="post">
+                                            <input type="hidden" value="{{id}}" />
+
+                                           <h3><input type="submit" class="btn btn-link btn-hg" value="{{b_name}}"/></h3>
+                                            <p class="posted"><strong>{{b_time}}|  ({{mark}}) &nbsp; Hotrank</strong></p>
+                                            <!--<p class="posted">文章类型：{{type}}</p>-->
+                                        </form>
+                                        <!--<a><span class="label badge-important">文字标签</span></a>-->
+                                        <p class="posted"> <strong>theme：</strong><button type="button" class="btn btn-primary btn-xs"> {{type}}</button></p>
+                                    </li>
+
+                                </ul>
+                            </script>
+                            </section>
+
+
+
+                            <!--数据处理-->
+                               第 <a id="pageNum" th:text="${pageNum}">1</a> 页
+                            <script type="text/javascript">
+                                var pageNum = document.getElementById("pageNum").innerText;
+//                                var search = document.getElementById("pname").value;
+                                var html ='';
+                                var html2 = '';
+                                $(document).ready(function () {
+//                                    alert(pageNum);
+                                    url = '/paper/paperList/'+pageNum;
+
+                                       $.ajax( {
+                                           type : "post",
+                                           dataType:"json",
+                                           url : url,
+                                           timeout : 20000,
+                                           cache : false,
+                                           success : function(data) {
+                                               var i;
+                                               for(i in data.list){
+                                                   html = template('page', data.list[i])+html;
+
+                                               }
+                                               html2 = template('page2',data);
+                                               document.getElementById('content1').innerHTML = html;
+                                               document.getElementById('content2').innerHTML = html2;
+                                           }
+
+                                       });
+                                })
+
+
+                            </script>
+                        </div>
+
+                        <!--分页部分-->
+                        <script id="page2" type="text/html">
+                            <ul class="pagination-plain">
+                                <li class="previous"><a href="/paper/pageList/{{prePage}}">← Previous</a></li>
+                                    {{each navigatepageNums value i}}
+                                    <li class="active" ><a href="/paper/pageList/{{value}}">{{value}}</a> </li>
+                                    {{/each}}
+
+                                <li class="next"><a href="/paper/pageList/{{nextPage}}">Newer →</a></li>
+                            </ul>
+                        </script>
+
+
+                        <div class="container-fluid">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div id="content2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--分页结束-->
+					</div>
+					
+				</div>
+			</div>
+		<!--</div>-->
+		
+	</body>
+</html>
