@@ -78,5 +78,15 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.DelectByTitle(name);
     }
 
+    @Override
+    public List<Paper> paperList() {
+        return paperMapper.paperList();
+    }
+
+    @Override
+    public List<Paper> PaperS(String name) {
+        return null;
+    }
+
 
 }

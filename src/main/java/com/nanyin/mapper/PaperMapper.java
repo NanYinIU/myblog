@@ -55,4 +55,9 @@ public interface PaperMapper {
 
     @Delete("DELETE  FROM blog.paper WHERE b_name=#{title}")
     int DelectByTitle(String title);
+
+
+    @Select("SELECT p.id, p.b_name,p.b_time,p.`type`,p.mark, p.type FROM blog.paper p")
+    List<Paper> paperList();
+
 }

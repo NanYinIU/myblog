@@ -31,4 +31,8 @@ public interface PaperService {
     int UpdatePage(Paper paper);
 
     int DelectByTitle (String name);
+
+    List<Paper> paperList();
+
+    List<Paper> PaperS(String name);
 }

@@ -97,4 +97,11 @@ public class OtherController {
     }
 
 
+
+////    测试用
+//    @RequestMapping("/test")
+//    public String test(){
+//        return "NewList";
+//    }
+
 }

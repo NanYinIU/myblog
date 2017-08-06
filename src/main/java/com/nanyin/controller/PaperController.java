@@ -1,7 +1,10 @@
 package com.nanyin.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.nanyin.entity.Paper;
 import com.nanyin.service.PaperService;
+import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +29,11 @@ public class PaperController {
     @Autowired
     PaperService paperService;
 
-    //  paper 访问入口
-    @RequestMapping("/pages")
-    public String pages(){
-        return "pageList";
-    }
+//    //  paper 访问入口
+//    @RequestMapping("/pages")
+//    public String pages(){
+//        return "pageList";
+//    }
 
     @RequestMapping(value = "/SelectTitles")
     public @ResponseBody List<Paper> SelectTitles(){
@@ -96,5 +100,25 @@ public class PaperController {
         }
         nameMap.put("valid",validd);
         return nameMap;
+    }
+
+    @RequestMapping(value = "/paperList/{pageNum}", method = RequestMethod.POST)
+    public @ResponseBody PageInfo paperList(@PathVariable(value = "pageNum") int pageNum,String search){
+        ModelAndView modelAndView = new ModelAndView();
+
+        PageHelper.startPage(pageNum, 5);
+        List<Paper> papers = paperService.paperList();
+        PageInfo pageInfo = new PageInfo(papers);
+        logger.info(pageInfo.toString());
+        modelAndView.addObject("pageInfo",pageInfo);
+        return pageInfo;
+    }
+//  paperList新入口
+    @RequestMapping("/pageList/{pageNum}")
+    public ModelAndView pageList(@PathVariable(value = "pageNum") int pageNum){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("paperNum",pageNum);
+        modelAndView.setViewName("NewList");
+        return modelAndView;
     }
 }
